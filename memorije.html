@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  
+  <title>Memorije</title>
+</head>
+
+    <style>
+      div#tabla {
+        background: #ccc;
+        border: #999 1px solid;
+        width: 800px;
+        height: 540px;
+        padding: 24px;
+        margin: 0px auto;
+      }
+      div#kliktanje {
+        width: 848px;
+        height: 540px;
+        padding-top: 24px;
+        font-size: 20px;
+        font-weight: 800;
+        margin: 0px auto;
+        text-align: center;
+        
+      }
+      div#click {
+        
+        padding-top: 24px;
+        font-size: 20px;
+        font-weight: 800;
+        margin: 0px auto;
+        text-align: center;
+      }
+      div#tabla > div {
+        background: url("Sharingan.png") no-repeat;
+        background-size: contain;
+        border: #000 1px solid;
+        width: 71px;
+        height: 71px;
+        float: left;
+        margin: 10px;
+        padding: 20px;
+        font-size: 64px;
+        cursor: pointer;
+        text-align: center;
+      }
+    </style>
+    <script>
+      var niz = ["A","A","B","B","C","C","D","D","E","E","F","F","G","G","H","H","I","I","J","J","K","K","L","L"];
+      var vrednosti = [];
+      var karte = [];
+      var obrnute_karte = 0;
+      var klik = 0;
+      Array.prototype.mesanje = function() {
+        var i = this.length,
+          j,
+          x;
+        while (--i > 0) {
+          j = Math.floor(Math.random() * (i + 1));
+          x = this[j];
+          this[j] = this[i];
+          this[i] = x;
+        }
+      };
+      function novaTabla() {
+        obrnute_karte = 0;
+        var output = "";
+        niz.mesanje();
+        for (var i = 0; i < niz.length; i++) {
+          output +=
+            '<div id="karta_' +
+            i +
+            '" onclick="obrtanjeKarte(this,\'' +
+            niz[i] +
+            "')\"></div>";
+        }
+        document.getElementById("tabla").innerHTML = output;
+        document.getElementById("kliktanje").innerHTML = klik;
+      }
+      function obrtanjeKarte(karta, val) {
+        klik++;
+        console.log(klik);
+        document.getElementById("kliktanje").innerHTML = klik;
+        if (karta.innerHTML == "" && vrednosti.length < 2) {
+          karta.style.background = "#FFF";
+          karta.innerHTML = val;
+          if (vrednosti.length == 0) {
+            vrednosti.push(val);
+            karte.push(karta.id);
+          } else if (vrednosti.length == 1) {
+            vrednosti.push(val);
+            karte.push(karta.id);
+            if (vrednosti[0] == vrednosti[1]) {
+              obrnute_karte += 2;
+              vrednosti = [];
+              karte = [];
+              if (obrnute_karte == niz.length) {
+                alert("Prešli ste igru... Pravi se nova tabla");
+                document.getElementById("tabla").innerHTML = "";
+                novaTabla();
+              }
+            } else {
+              function obrtanjeNazad() {
+                var karta_1 = document.getElementById(karte[0]);
+                var karta_2 = document.getElementById(karte[1]);
+                karta_1.style.background = 'url("Sharingan.png") no-repeat';
+                karta_1.style.backgroundSize = "contain";
+                karta_1.innerHTML = "";
+                karta_2.style.background = 'url("Sharingan.png") no-repeat';
+                karta_2.style.backgroundSize = "contain";
+                karta_2.innerHTML = "";
+                vrednosti = [];
+                karte = [];
+              }
+              setTimeout(obrtanjeNazad, 700);
+            }
+          }
+        }
+      }
+    </script>
+  </head>
+  <body>
+        <div id="tabla"></div>
+    <div id="click">Click Count:</div> 
+    <div id="kliktanje"></div>
+     <script>
+      novaTabla();
+    </script>
+  </body>
+</html>
